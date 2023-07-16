@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Weights Log</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    img {
+      max-width: 100px;
+      max-height: 100px;
+    }
+  </style>
+</head>
+<body>
+<h1>Weights Log</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Timestamp</th>
+    <th>Value</th>
+    <th>Machine</th>
+    <th>Image</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for weight in history %}
+    <tr>
+      <td>{{ weight[0] }}</td>
+      <td>{{ weight[2] }}</td>
+      <td>{{ weight[1] }}</td>
+      <td>{{ weight[4] }}</td>
+      <td>{% if weight[3] and weight[3] != "": %}<a href="{{ url_for('static', filename = weight[3]) }}"><img src="{{ url_for('static', filename = weight[3]) }}" /></a> {% endif %}</td>
+      <td>
+        <form action="{{ url_for('delete', weight_id=weight[0]) }}" method="POST">
+          <button type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<br>
+
+{% set prev_page = page - 1 %}
+{% set next_page = page + 1 %}
+<div>
+  {% if prev_page > 0 %}
+    <a href="{{ url_for('index', page=prev_page) }}">Previous</a>
+  {% endif %}
+  <a href="{{ url_for('index', page=next_page) }}">Next</a>
+</div>
+</body>
+</html>
